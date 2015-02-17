@@ -683,10 +683,16 @@
 <span id="641">641</span>
 <span id="642">642</span>
 <span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_void</span>, <span class='ident'>c_long</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::{<span class='ident'>CString</span>, <span class='ident'>c_str_to_bytes</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>old_io</span>::{<span class='ident'>IoResult</span>, <span class='ident'>IoError</span>, <span class='ident'>EndOfFile</span>, <span class='ident'>Stream</span>, <span class='ident'>Reader</span>, <span class='ident'>Writer</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>old_io</span>::{<span class='ident'>IoResult</span>, <span class='ident'>IoError</span>, <span class='ident'>EndOfFile</span>, <span class='ident'>OtherIoError</span>, <span class='ident'>Stream</span>, <span class='ident'>Reader</span>, <span class='ident'>Writer</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>num</span>::<span class='ident'>FromPrimitive</span>;
@@ -695,7 +701,7 @@
 
 <span class='kw'>use</span> <span class='ident'>bio</span>::{<span class='ident'>MemBio</span>};
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
-<span class='kw'>use</span> <span class='ident'>ssl</span>::<span class='ident'>error</span>::{<span class='ident'>SslError</span>, <span class='ident'>SslSessionClosed</span>, <span class='ident'>StreamError</span>};
+<span class='kw'>use</span> <span class='ident'>ssl</span>::<span class='ident'>error</span>::{<span class='ident'>SslError</span>, <span class='ident'>SslSessionClosed</span>, <span class='ident'>StreamError</span>, <span class='ident'>OpenSslErrors</span>};
 <span class='kw'>use</span> <span class='ident'>x509</span>::{<span class='ident'>X509StoreContext</span>, <span class='ident'>X509FileType</span>, <span class='ident'>X509</span>};
 
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>error</span>;
@@ -1245,7 +1251,13 @@
                     <span class='ident'>detail</span>: <span class='prelude-val'>None</span>
                 }),
             <span class='prelude-val'>Err</span>(<span class='ident'>StreamError</span>(<span class='ident'>e</span>)) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>),
-            _ <span class='op'>=&gt;</span> <span class='macro'>unreachable</span><span class='macro'>!</span>()
+            <span class='prelude-val'>Err</span>(<span class='ident'>e</span> <span class='kw-2'>@</span> <span class='ident'>OpenSslErrors</span>(_)) <span class='op'>=&gt;</span> {
+                <span class='prelude-val'>Err</span>(<span class='ident'>IoError</span> {
+                    <span class='ident'>kind</span>: <span class='ident'>OtherIoError</span>,
+                    <span class='ident'>desc</span>: <span class='string'>&quot;SSL error&quot;</span>,
+                    <span class='ident'>detail</span>: <span class='prelude-val'>Some</span>(<span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>e</span>)),
+                })
+            }
         }
     }
 }
