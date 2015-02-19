@@ -551,6 +551,9 @@
 <span id="509">509</span>
 <span id="510">510</span>
 <span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>non_camel_case_types</span>, <span class='ident'>non_upper_case_globals</span>, <span class='ident'>non_snake_case</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
@@ -772,7 +775,10 @@
             <span class='ident'>SSL_load_error_strings</span>();
 
             <span class='kw'>let</span> <span class='ident'>num_locks</span> <span class='op'>=</span> <span class='ident'>CRYPTO_num_locks</span>();
-            <span class='kw'>let</span> <span class='ident'>mutexes</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>range</span>(<span class='number'>0</span>, <span class='ident'>num_locks</span>).<span class='ident'>map</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>MUTEX_INIT</span>).<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;&gt;</span>());
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>mutexes</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>Vec</span>::<span class='ident'>new</span>());
+            <span class='kw'>for</span> _ <span class='kw'>in</span> <span class='number'>0</span>..<span class='ident'>num_locks</span> {
+                <span class='ident'>mutexes</span>.<span class='ident'>push</span>(<span class='ident'>MUTEX_INIT</span>);
+            }
             <span class='ident'>MUTEXES</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>mutexes</span>);
             <span class='kw'>let</span> <span class='ident'>guards</span>: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>MutexGuard</span><span class='op'>&lt;</span>()<span class='op'>&gt;&gt;</span><span class='op'>&gt;&gt;</span> <span class='op'>=</span>
                 <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>range</span>(<span class='number'>0</span>, <span class='ident'>num_locks</span>).<span class='ident'>map</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='prelude-val'>None</span>).<span class='ident'>collect</span>());
