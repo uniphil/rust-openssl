@@ -43,9 +43,9 @@
     <section id='main' class="content enum">
 <h1 class='fqn'><span class='in-band'>Enum <a href='../../index.html'>openssl</a>::<wbr><a href='../index.html'>ssl</a>::<wbr><a href='index.html'>error</a>::<wbr><a class='enum' href=''>SslError</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-7882' href='../../../src/openssl/ssl/error.rs.html#14-21'>[src]</a></span></h1>
+        </span><a id='src-7941' href='../../../src/openssl/ssl/error.rs.html#14-21'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum SslError {
-    StreamError(<a class='struct' href='http://doc.rust-lang.org/nightly/std/old_io/struct.IoError.html' title='std::old_io::IoError'>IoError</a>),
+    StreamError(<a class='struct' href='http://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>),
     SslSessionClosed,
     OpenSslErrors(<a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../../openssl/ssl/error/enum.OpensslError.html' title='openssl::ssl::error::OpensslError'>OpensslError</a>&gt;),
 }</pre><div class='docblock'><p>An SSL error</p>

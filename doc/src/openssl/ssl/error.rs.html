@@ -186,7 +186,7 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>CStr</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>old_io</span>::<span class='ident'>IoError</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
 
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 
@@ -194,7 +194,7 @@
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Clone</span>, <span class='ident'>PartialEq</span>, <span class='ident'>Eq</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>SslError</span> {
     <span class='doccomment'>/// The underlying stream reported an error</span>
-    <span class='ident'>StreamError</span>(<span class='ident'>IoError</span>),
+    <span class='ident'>StreamError</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>),
     <span class='doccomment'>/// The SSL session has been closed by the other end</span>
     <span class='ident'>SslSessionClosed</span>,
     <span class='doccomment'>/// An error in the OpenSSL library</span>
