@@ -557,7 +557,7 @@
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>non_camel_case_types</span>, <span class='ident'>non_upper_case_globals</span>, <span class='ident'>non_snake_case</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>core</span>, <span class='ident'>old_io</span>, <span class='ident'>old_path</span>, <span class='ident'>std_misc</span>, <span class='ident'>env</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>path</span>, <span class='ident'>fs</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>doc</span>(<span class='ident'>html_root_url</span><span class='op'>=</span><span class='string'>&quot;https://sfackler.github.io/rust-openssl/doc/openssl-sys&quot;</span>)]</span>
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
@@ -568,7 +568,7 @@
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_void</span>, <span class='ident'>c_int</span>, <span class='ident'>c_char</span>, <span class='ident'>c_ulong</span>, <span class='ident'>c_long</span>, <span class='ident'>c_uint</span>, <span class='ident'>c_uchar</span>, <span class='ident'>size_t</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ptr</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::{<span class='ident'>StaticMutex</span>, <span class='ident'>MutexGuard</span>, <span class='ident'>MUTEX_INIT</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::{<span class='ident'>Mutex</span>, <span class='ident'>MutexGuard</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::{<span class='ident'>Once</span>, <span class='ident'>ONCE_INIT</span>};
 
 <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>ASN1_INTEGER</span> <span class='op'>=</span> <span class='ident'>c_void</span>;
@@ -750,7 +750,7 @@
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>X509_V_ERR_UNSUPPORTED_NAME_SYNTAX</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>53</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>X509_V_OK</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>0</span>;
 
-<span class='kw'>static</span> <span class='kw-2'>mut</span> <span class='ident'>MUTEXES</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>StaticMutex</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='number'>0</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>StaticMutex</span><span class='op'>&gt;</span>;
+<span class='kw'>static</span> <span class='kw-2'>mut</span> <span class='ident'>MUTEXES</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Mutex</span><span class='op'>&lt;</span>()<span class='op'>&gt;&gt;</span> <span class='op'>=</span> <span class='number'>0</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Mutex</span><span class='op'>&lt;</span>()<span class='op'>&gt;&gt;</span>;
 <span class='kw'>static</span> <span class='kw-2'>mut</span> <span class='ident'>GUARDS</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>MutexGuard</span><span class='op'>&lt;</span><span class='lifetime'>&#39;static</span>, ()<span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='number'>0</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>MutexGuard</span><span class='op'>&lt;</span><span class='lifetime'>&#39;static</span>, ()<span class='op'>&gt;&gt;</span><span class='op'>&gt;</span>;
 
 <span class='kw'>extern</span> <span class='kw'>fn</span> <span class='ident'>locking_function</span>(<span class='ident'>mode</span>: <span class='ident'>c_int</span>, <span class='ident'>n</span>: <span class='ident'>c_int</span>, <span class='ident'>_file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
@@ -777,11 +777,11 @@
             <span class='kw'>let</span> <span class='ident'>num_locks</span> <span class='op'>=</span> <span class='ident'>CRYPTO_num_locks</span>();
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>mutexes</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>Vec</span>::<span class='ident'>new</span>());
             <span class='kw'>for</span> _ <span class='kw'>in</span> <span class='number'>0</span>..<span class='ident'>num_locks</span> {
-                <span class='ident'>mutexes</span>.<span class='ident'>push</span>(<span class='ident'>MUTEX_INIT</span>);
+                <span class='ident'>mutexes</span>.<span class='ident'>push</span>(<span class='ident'>Mutex</span>::<span class='ident'>new</span>(()));
             }
             <span class='ident'>MUTEXES</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>mutexes</span>);
             <span class='kw'>let</span> <span class='ident'>guards</span>: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>MutexGuard</span><span class='op'>&lt;</span>()<span class='op'>&gt;&gt;</span><span class='op'>&gt;&gt;</span> <span class='op'>=</span>
-                <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>range</span>(<span class='number'>0</span>, <span class='ident'>num_locks</span>).<span class='ident'>map</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='prelude-val'>None</span>).<span class='ident'>collect</span>());
+                <span class='ident'>Box</span>::<span class='ident'>new</span>((<span class='number'>0</span>..<span class='ident'>num_locks</span>).<span class='ident'>map</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='prelude-val'>None</span>).<span class='ident'>collect</span>());
             <span class='ident'>GUARDS</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>guards</span>);
 
             <span class='ident'>CRYPTO_set_locking_callback</span>(<span class='ident'>locking_function</span>);
