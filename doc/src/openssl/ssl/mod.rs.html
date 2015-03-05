@@ -685,6 +685,18 @@
 <span id="643">643</span>
 <span id="644">644</span>
 <span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_void</span>, <span class='ident'>c_long</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::{<span class='ident'>CStr</span>, <span class='ident'>CString</span>};
@@ -693,6 +705,7 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>AsOsStr</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>num</span>::<span class='ident'>FromPrimitive</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>num</span>::<span class='ident'>Int</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>Path</span>;
@@ -1123,6 +1136,17 @@
     <span class='ident'>stream</span>: <span class='ident'>S</span>,
     <span class='ident'>ssl</span>: <span class='ident'>Arc</span><span class='op'>&lt;</span><span class='ident'>Ssl</span><span class='op'>&gt;</span>,
     <span class='ident'>buf</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>
+}
+
+<span class='kw'>impl</span> <span class='ident'>SslStream</span><span class='op'>&lt;</span><span class='ident'>net</span>::<span class='ident'>TcpStream</span><span class='op'>&gt;</span> {
+    <span class='doccomment'>/// Create a new independently owned handle to the underlying socket.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>try_clone</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SslStream</span><span class='op'>&lt;</span><span class='ident'>net</span>::<span class='ident'>TcpStream</span><span class='op'>&gt;&gt;</span> {
+        <span class='prelude-val'>Ok</span>(<span class='ident'>SslStream</span> { 
+            <span class='ident'>stream</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>stream</span>.<span class='ident'>try_clone</span>()),
+            <span class='ident'>ssl</span>: <span class='self'>self</span>.<span class='ident'>ssl</span>.<span class='ident'>clone</span>(),
+            <span class='ident'>buf</span>: <span class='self'>self</span>.<span class='ident'>buf</span>.<span class='ident'>clone</span>(),
+        })
+    }
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>SslStream</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>S</span>: <span class='ident'>fmt</span>::<span class='ident'>Debug</span> {
