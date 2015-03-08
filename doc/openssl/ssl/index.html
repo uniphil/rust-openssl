@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='../index.html'>openssl</a></p><div class='block mod'><h2>Modules</h2><a class='mod ' href='../asn1/index.html' title=''>asn1</a><a class='mod ' href='../bio/index.html' title=''>bio</a><a class='mod ' href='../bn/index.html' title=''>bn</a><a class='mod ' href='../crypto/index.html' title=''>crypto</a><a class='mod current' href='../ssl/index.html' title=''>ssl</a><a class='mod ' href='../x509/index.html' title=''>x509</a></div>
+        <p class='location'><a href='../index.html'>openssl</a></p><script>window.sidebarCurrent = {name: 'ssl', ty: 'mod', relpath: '../'};</script><script async src="../sidebar-items.js"></script>
     </section>
 
     <nav class="sub">
@@ -43,7 +43,7 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>openssl</a>::<wbr><a class='mod' href=''>ssl</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-7893' href='../../src/openssl/ssl/mod.rs.html#1-657'>[src]</a></span></h1>
+        </span><a id='src-7894' href='../../src/openssl/ssl/mod.rs.html#1-713'>[src]</a></span></h1>
 <h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr>
@@ -64,6 +64,12 @@
                                title='openssl::ssl::SslContext'>SslContext</a></td>
                         <td class='docblock short'><p>An SSL context object</p>
 </td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.SslContextOptions.html'
+                               title='openssl::ssl::SslContextOptions'>SslContextOptions</a></td>
+                        <td class='docblock short'></td>
                     </tr>
                 
                     <tr>
@@ -93,6 +99,175 @@
                                title='openssl::ssl::SslVerifyMode'>SslVerifyMode</a></td>
                         <td class='docblock short'><p>Determines the type of certificate verification used</p>
 </td>
+                    </tr>
+                </table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_ALL.html'
+                               title='openssl::ssl::SSL_OP_ALL'>SSL_OP_ALL</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION.html'
+                               title='openssl::ssl::SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION'>SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_CIPHER_SERVER_PREFERENCE.html'
+                               title='openssl::ssl::SSL_OP_CIPHER_SERVER_PREFERENCE'>SSL_OP_CIPHER_SERVER_PREFERENCE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_CISCO_ANYCONNECT.html'
+                               title='openssl::ssl::SSL_OP_CISCO_ANYCONNECT'>SSL_OP_CISCO_ANYCONNECT</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_COOKIE_EXCHANGE.html'
+                               title='openssl::ssl::SSL_OP_COOKIE_EXCHANGE'>SSL_OP_COOKIE_EXCHANGE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS.html'
+                               title='openssl::ssl::SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS'>SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_LEGACY_SERVER_CONNECT.html'
+                               title='openssl::ssl::SSL_OP_LEGACY_SERVER_CONNECT'>SSL_OP_LEGACY_SERVER_CONNECT</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER.html'
+                               title='openssl::ssl::SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER'>SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG.html'
+                               title='openssl::ssl::SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG'>SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_COMPRESSION.html'
+                               title='openssl::ssl::SSL_OP_NO_COMPRESSION'>SSL_OP_NO_COMPRESSION</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_DTLSV1.html'
+                               title='openssl::ssl::SSL_OP_NO_DTLSV1'>SSL_OP_NO_DTLSV1</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_DTLSV1_2.html'
+                               title='openssl::ssl::SSL_OP_NO_DTLSV1_2'>SSL_OP_NO_DTLSV1_2</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_QUERY_MTU.html'
+                               title='openssl::ssl::SSL_OP_NO_QUERY_MTU'>SSL_OP_NO_QUERY_MTU</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION.html'
+                               title='openssl::ssl::SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION'>SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_SSLV2.html'
+                               title='openssl::ssl::SSL_OP_NO_SSLV2'>SSL_OP_NO_SSLV2</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_SSLV3.html'
+                               title='openssl::ssl::SSL_OP_NO_SSLV3'>SSL_OP_NO_SSLV3</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_TICKET.html'
+                               title='openssl::ssl::SSL_OP_NO_TICKET'>SSL_OP_NO_TICKET</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_TLSV1.html'
+                               title='openssl::ssl::SSL_OP_NO_TLSV1'>SSL_OP_NO_TLSV1</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_TLSV1_1.html'
+                               title='openssl::ssl::SSL_OP_NO_TLSV1_1'>SSL_OP_NO_TLSV1_1</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_NO_TLSV1_2.html'
+                               title='openssl::ssl::SSL_OP_NO_TLSV1_2'>SSL_OP_NO_TLSV1_2</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_SAFARI_ECDHE_ECDSA_BUG.html'
+                               title='openssl::ssl::SSL_OP_SAFARI_ECDHE_ECDSA_BUG'>SSL_OP_SAFARI_ECDHE_ECDSA_BUG</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_SINGLE_DH_USE.html'
+                               title='openssl::ssl::SSL_OP_SINGLE_DH_USE'>SSL_OP_SINGLE_DH_USE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_SINGLE_ECDH_USE.html'
+                               title='openssl::ssl::SSL_OP_SINGLE_ECDH_USE'>SSL_OP_SINGLE_ECDH_USE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_SSLEAY_080_CLIENT_DH_BUG.html'
+                               title='openssl::ssl::SSL_OP_SSLEAY_080_CLIENT_DH_BUG'>SSL_OP_SSLEAY_080_CLIENT_DH_BUG</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_TLSEXT_PADDING.html'
+                               title='openssl::ssl::SSL_OP_TLSEXT_PADDING'>SSL_OP_TLSEXT_PADDING</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_TLS_BLOCK_PADDING_BUG.html'
+                               title='openssl::ssl::SSL_OP_TLS_BLOCK_PADDING_BUG'>SSL_OP_TLS_BLOCK_PADDING_BUG</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_TLS_D5_BUG.html'
+                               title='openssl::ssl::SSL_OP_TLS_D5_BUG'>SSL_OP_TLS_D5_BUG</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_TLS_ROLLBACK_BUG.html'
+                               title='openssl::ssl::SSL_OP_TLS_ROLLBACK_BUG'>SSL_OP_TLS_ROLLBACK_BUG</a></td>
+                        <td class='docblock short'></td>
                     </tr>
                 </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
 <table>
