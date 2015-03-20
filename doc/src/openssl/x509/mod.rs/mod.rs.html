@@ -1091,7 +1091,7 @@
 <span class='attribute'>#[<span class='ident'>test</span>]</span>
 <span class='kw'>fn</span> <span class='ident'>test_negative_serial</span>() {
     <span class='comment'>// I guess that&#39;s enough to get a random negative number</span>
-    <span class='kw'>for</span> _ <span class='kw'>in</span> <span class='ident'>range</span>(<span class='number'>0</span>, <span class='number'>1000</span>) {
+    <span class='kw'>for</span> _ <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>1000</span> {
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>X509Generator</span>::<span class='ident'>random_serial</span>() <span class='op'>&gt;</span> <span class='number'>0</span>, <span class='string'>&quot;All serials should be positive&quot;</span>);
     }
 }
