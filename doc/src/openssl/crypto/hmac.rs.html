@@ -9,7 +9,7 @@
 
     <title>hmac.rs.html -- source</title>
 
-    <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
 
     
     
@@ -575,7 +575,7 @@
 <span class='doccomment'>/// use openssl::crypto::hash::Type;</span>
 <span class='doccomment'>/// use openssl::crypto::hmac::HMAC;</span>
 <span class='doccomment'>/// let key = b&quot;Jefe&quot;;</span>
-<span class='doccomment'>/// let data = [b&quot;what do ya &quot;, b&quot;want for nothing?&quot;];</span>
+<span class='doccomment'>/// let data: &amp;[&amp;[u8]] = &amp;[b&quot;what do ya &quot;, b&quot;want for nothing?&quot;];</span>
 <span class='doccomment'>/// let spec = b&quot;\x75\x0c\x78\x3e\x6a\xb0\xb5\x03\xea\xa8\x6e\x31\x0a\x5d\xb7\x38&quot;;</span>
 <span class='doccomment'>/// let mut h = HMAC::new(Type::MD5, &amp;*key);</span>
 <span class='doccomment'>/// h.write_all(data[0]);</span>
@@ -1037,13 +1037,13 @@
     
 
     <script>
-        window.rootPath = "../../../../";
+        window.rootPath = "../../../";
         window.currentCrate = "openssl";
         window.playgroundUrl = "";
     </script>
-    <script src="../../../../jquery.js"></script>
-    <script src="../../../../main.js"></script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
     
-    <script async src="../../../../search-index.js"></script>
+    <script async src="../../../search-index.js"></script>
 </body>
 </html>
