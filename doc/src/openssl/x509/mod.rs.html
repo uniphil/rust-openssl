@@ -567,6 +567,15 @@
 <span id="525">525</span>
 <span id="526">526</span>
 <span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_char</span>, <span class='ident'>c_int</span>, <span class='ident'>c_long</span>, <span class='ident'>c_uint</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
@@ -868,6 +877,15 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>p_key</span> <span class='op'>=</span> <span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='ident'>p_key</span>.<span class='ident'>gen</span>(<span class='self'>self</span>.<span class='ident'>bits</span> <span class='kw'>as</span> <span class='ident'>usize</span>);
 
+        <span class='kw'>let</span> <span class='ident'>x509</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>sign</span>(<span class='kw-2'>&amp;</span><span class='ident'>p_key</span>));
+        <span class='prelude-val'>Ok</span>((<span class='ident'>x509</span>, <span class='ident'>p_key</span>))
+    }
+
+    <span class='doccomment'>/// Signs certificate with a private key and returns it</span>
+    <span class='doccomment'>/// Note: That the bit-length of the private key is used (set_bitlength is ignored)</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>sign</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>p_key</span>: <span class='kw-2'>&amp;</span><span class='ident'>PKey</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>X509</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>, <span class='ident'>SslError</span><span class='op'>&gt;</span> {
+        <span class='ident'>ffi</span>::<span class='ident'>init</span>();
+
         <span class='kw'>unsafe</span> {
             <span class='kw'>let</span> <span class='ident'>x509</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>X509_new</span>();
             <span class='macro'>try_ssl_null</span><span class='macro'>!</span>(<span class='ident'>x509</span>);
@@ -908,7 +926,7 @@
 
             <span class='kw'>let</span> <span class='ident'>hash_fn</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hash_type</span>.<span class='ident'>evp_md</span>();
             <span class='macro'>try_ssl</span><span class='macro'>!</span>(<span class='ident'>ffi</span>::<span class='ident'>X509_sign</span>(<span class='ident'>x509</span>.<span class='ident'>handle</span>, <span class='ident'>p_key</span>.<span class='ident'>get_handle</span>(), <span class='ident'>hash_fn</span>));
-            <span class='prelude-val'>Ok</span>((<span class='ident'>x509</span>, <span class='ident'>p_key</span>))
+            <span class='prelude-val'>Ok</span>(<span class='ident'>x509</span>)
         }
     }
 }
