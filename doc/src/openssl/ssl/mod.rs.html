@@ -905,8 +905,11 @@
 <span id="863">863</span>
 <span id="864">864</span>
 <span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
 </pre><pre class='rust '>
-<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_void</span>, <span class='ident'>c_long</span>, <span class='ident'>c_uint</span>, <span class='ident'>c_uchar</span>};
+<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_void</span>, <span class='ident'>c_long</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::{<span class='ident'>CStr</span>, <span class='ident'>CString</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
@@ -914,7 +917,6 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>AsOsStr</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>slice</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>num</span>::<span class='ident'>FromPrimitive</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>num</span>::<span class='ident'>Int</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>Path</span>;
@@ -922,6 +924,10 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::{<span class='ident'>Once</span>, <span class='ident'>ONCE_INIT</span>, <span class='ident'>Arc</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::{<span class='ident'>Deref</span>, <span class='ident'>DerefMut</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cmp</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;npn&quot;</span>)]</span>
+<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_uchar</span>, <span class='ident'>c_uint</span>};
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;npn&quot;</span>)]</span>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>slice</span>;
 
 <span class='kw'>use</span> <span class='ident'>bio</span>::{<span class='ident'>MemBio</span>};
 <span class='kw'>use</span> <span class='ident'>ffi</span>;

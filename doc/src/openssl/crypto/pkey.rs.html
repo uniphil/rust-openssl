@@ -810,7 +810,7 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>k0</span> <span class='op'>=</span> <span class='ident'>super</span>::<span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>k1</span> <span class='op'>=</span> <span class='ident'>super</span>::<span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='ident'>k0</span>.<span class='ident'>gen</span>(<span class='number'>512</span>);
-        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='ident'>k0</span>.<span class='ident'>save_pub</span>().<span class='ident'>as_slice</span>());
+        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='kw-2'>&amp;</span><span class='ident'>k0</span>.<span class='ident'>save_pub</span>());
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>k0</span>.<span class='ident'>save_pub</span>(), <span class='ident'>k1</span>.<span class='ident'>save_pub</span>());
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>k0</span>.<span class='ident'>size</span>(), <span class='ident'>k1</span>.<span class='ident'>size</span>());
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>k0</span>.<span class='ident'>can</span>(<span class='ident'>super</span>::<span class='ident'>Role</span>::<span class='ident'>Encrypt</span>));
@@ -828,7 +828,7 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>k0</span> <span class='op'>=</span> <span class='ident'>super</span>::<span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>k1</span> <span class='op'>=</span> <span class='ident'>super</span>::<span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='ident'>k0</span>.<span class='ident'>gen</span>(<span class='number'>512</span>);
-        <span class='ident'>k1</span>.<span class='ident'>load_priv</span>(<span class='ident'>k0</span>.<span class='ident'>save_priv</span>().<span class='ident'>as_slice</span>());
+        <span class='ident'>k1</span>.<span class='ident'>load_priv</span>(<span class='kw-2'>&amp;</span><span class='ident'>k0</span>.<span class='ident'>save_priv</span>());
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>k0</span>.<span class='ident'>save_priv</span>(), <span class='ident'>k1</span>.<span class='ident'>save_priv</span>());
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>k0</span>.<span class='ident'>size</span>(), <span class='ident'>k1</span>.<span class='ident'>size</span>());
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>k0</span>.<span class='ident'>can</span>(<span class='ident'>super</span>::<span class='ident'>Role</span>::<span class='ident'>Encrypt</span>));
@@ -847,9 +847,9 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>k1</span> <span class='op'>=</span> <span class='ident'>super</span>::<span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='kw'>let</span> <span class='ident'>msg</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='number'>0xdeu8</span>, <span class='number'>0xadu8</span>, <span class='number'>0xd0u8</span>, <span class='number'>0x0du8</span>);
         <span class='ident'>k0</span>.<span class='ident'>gen</span>(<span class='number'>512</span>);
-        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='ident'>k0</span>.<span class='ident'>save_pub</span>().<span class='ident'>as_slice</span>());
-        <span class='kw'>let</span> <span class='ident'>emsg</span> <span class='op'>=</span> <span class='ident'>k1</span>.<span class='ident'>encrypt</span>(<span class='ident'>msg</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>let</span> <span class='ident'>dmsg</span> <span class='op'>=</span> <span class='ident'>k0</span>.<span class='ident'>decrypt</span>(<span class='ident'>emsg</span>.<span class='ident'>as_slice</span>());
+        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='kw-2'>&amp;</span><span class='ident'>k0</span>.<span class='ident'>save_pub</span>());
+        <span class='kw'>let</span> <span class='ident'>emsg</span> <span class='op'>=</span> <span class='ident'>k1</span>.<span class='ident'>encrypt</span>(<span class='kw-2'>&amp;</span><span class='ident'>msg</span>);
+        <span class='kw'>let</span> <span class='ident'>dmsg</span> <span class='op'>=</span> <span class='ident'>k0</span>.<span class='ident'>decrypt</span>(<span class='kw-2'>&amp;</span><span class='ident'>emsg</span>);
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>msg</span> <span class='op'>==</span> <span class='ident'>dmsg</span>);
     }
 
@@ -859,9 +859,9 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>k1</span> <span class='op'>=</span> <span class='ident'>super</span>::<span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='kw'>let</span> <span class='ident'>msg</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='number'>0xdeu8</span>, <span class='number'>0xadu8</span>, <span class='number'>0xd0u8</span>, <span class='number'>0x0du8</span>);
         <span class='ident'>k0</span>.<span class='ident'>gen</span>(<span class='number'>512</span>);
-        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='ident'>k0</span>.<span class='ident'>save_pub</span>().<span class='ident'>as_slice</span>());
-        <span class='kw'>let</span> <span class='ident'>emsg</span> <span class='op'>=</span> <span class='ident'>k1</span>.<span class='ident'>encrypt_with_padding</span>(<span class='ident'>msg</span>.<span class='ident'>as_slice</span>(), <span class='ident'>super</span>::<span class='ident'>EncryptionPadding</span>::<span class='ident'>PKCS1v15</span>);
-        <span class='kw'>let</span> <span class='ident'>dmsg</span> <span class='op'>=</span> <span class='ident'>k0</span>.<span class='ident'>decrypt_with_padding</span>(<span class='ident'>emsg</span>.<span class='ident'>as_slice</span>(), <span class='ident'>super</span>::<span class='ident'>EncryptionPadding</span>::<span class='ident'>PKCS1v15</span>);
+        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='kw-2'>&amp;</span><span class='ident'>k0</span>.<span class='ident'>save_pub</span>());
+        <span class='kw'>let</span> <span class='ident'>emsg</span> <span class='op'>=</span> <span class='ident'>k1</span>.<span class='ident'>encrypt_with_padding</span>(<span class='kw-2'>&amp;</span><span class='ident'>msg</span>, <span class='ident'>super</span>::<span class='ident'>EncryptionPadding</span>::<span class='ident'>PKCS1v15</span>);
+        <span class='kw'>let</span> <span class='ident'>dmsg</span> <span class='op'>=</span> <span class='ident'>k0</span>.<span class='ident'>decrypt_with_padding</span>(<span class='kw-2'>&amp;</span><span class='ident'>emsg</span>, <span class='ident'>super</span>::<span class='ident'>EncryptionPadding</span>::<span class='ident'>PKCS1v15</span>);
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>msg</span> <span class='op'>==</span> <span class='ident'>dmsg</span>);
     }
 
@@ -871,9 +871,9 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>k1</span> <span class='op'>=</span> <span class='ident'>super</span>::<span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='kw'>let</span> <span class='ident'>msg</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='number'>0xdeu8</span>, <span class='number'>0xadu8</span>, <span class='number'>0xd0u8</span>, <span class='number'>0x0du8</span>);
         <span class='ident'>k0</span>.<span class='ident'>gen</span>(<span class='number'>512</span>);
-        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='ident'>k0</span>.<span class='ident'>save_pub</span>().<span class='ident'>as_slice</span>());
-        <span class='kw'>let</span> <span class='ident'>sig</span> <span class='op'>=</span> <span class='ident'>k0</span>.<span class='ident'>sign</span>(<span class='ident'>msg</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>let</span> <span class='ident'>rv</span> <span class='op'>=</span> <span class='ident'>k1</span>.<span class='ident'>verify</span>(<span class='ident'>msg</span>.<span class='ident'>as_slice</span>(), <span class='ident'>sig</span>.<span class='ident'>as_slice</span>());
+        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='kw-2'>&amp;</span><span class='ident'>k0</span>.<span class='ident'>save_pub</span>());
+        <span class='kw'>let</span> <span class='ident'>sig</span> <span class='op'>=</span> <span class='ident'>k0</span>.<span class='ident'>sign</span>(<span class='kw-2'>&amp;</span><span class='ident'>msg</span>);
+        <span class='kw'>let</span> <span class='ident'>rv</span> <span class='op'>=</span> <span class='ident'>k1</span>.<span class='ident'>verify</span>(<span class='kw-2'>&amp;</span><span class='ident'>msg</span>, <span class='kw-2'>&amp;</span><span class='ident'>sig</span>);
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>rv</span> <span class='op'>==</span> <span class='boolval'>true</span>);
     }
 
@@ -883,12 +883,12 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>k1</span> <span class='op'>=</span> <span class='ident'>super</span>::<span class='ident'>PKey</span>::<span class='ident'>new</span>();
         <span class='kw'>let</span> <span class='ident'>msg</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='number'>0xdeu8</span>, <span class='number'>0xadu8</span>, <span class='number'>0xd0u8</span>, <span class='number'>0x0du8</span>);
         <span class='ident'>k0</span>.<span class='ident'>gen</span>(<span class='number'>512</span>);
-        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='ident'>k0</span>.<span class='ident'>save_pub</span>().<span class='ident'>as_slice</span>());
+        <span class='ident'>k1</span>.<span class='ident'>load_pub</span>(<span class='kw-2'>&amp;</span><span class='ident'>k0</span>.<span class='ident'>save_pub</span>());
 
-        <span class='kw'>let</span> <span class='ident'>sig</span> <span class='op'>=</span> <span class='ident'>k0</span>.<span class='ident'>sign_with_hash</span>(<span class='ident'>msg</span>.<span class='ident'>as_slice</span>(), <span class='ident'>MD5</span>);
+        <span class='kw'>let</span> <span class='ident'>sig</span> <span class='op'>=</span> <span class='ident'>k0</span>.<span class='ident'>sign_with_hash</span>(<span class='kw-2'>&amp;</span><span class='ident'>msg</span>, <span class='ident'>MD5</span>);
 
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>k1</span>.<span class='ident'>verify_with_hash</span>(<span class='ident'>msg</span>.<span class='ident'>as_slice</span>(), <span class='ident'>sig</span>.<span class='ident'>as_slice</span>(), <span class='ident'>MD5</span>));
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>k1</span>.<span class='ident'>verify_with_hash</span>(<span class='ident'>msg</span>.<span class='ident'>as_slice</span>(), <span class='ident'>sig</span>.<span class='ident'>as_slice</span>(), <span class='ident'>SHA1</span>));
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>k1</span>.<span class='ident'>verify_with_hash</span>(<span class='kw-2'>&amp;</span><span class='ident'>msg</span>, <span class='kw-2'>&amp;</span><span class='ident'>sig</span>, <span class='ident'>MD5</span>));
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>k1</span>.<span class='ident'>verify_with_hash</span>(<span class='kw-2'>&amp;</span><span class='ident'>msg</span>, <span class='kw-2'>&amp;</span><span class='ident'>sig</span>, <span class='ident'>SHA1</span>));
     }
 }
 </pre>

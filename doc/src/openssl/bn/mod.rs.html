@@ -1226,7 +1226,7 @@
     <span class='kw'>fn</span> <span class='ident'>test_to_from_slice</span>() {
         <span class='kw'>let</span> <span class='ident'>v0</span> <span class='op'>=</span> <span class='ident'>BigNum</span>::<span class='ident'>new_from</span>(<span class='number'>10203004_u64</span>).<span class='ident'>unwrap</span>();
         <span class='kw'>let</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='ident'>v0</span>.<span class='ident'>to_vec</span>();
-        <span class='kw'>let</span> <span class='ident'>v1</span> <span class='op'>=</span> <span class='ident'>BigNum</span>::<span class='ident'>new_from_slice</span>(<span class='ident'>vec</span>.<span class='ident'>as_slice</span>()).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>v1</span> <span class='op'>=</span> <span class='ident'>BigNum</span>::<span class='ident'>new_from_slice</span>(<span class='kw-2'>&amp;</span><span class='ident'>vec</span>).<span class='ident'>unwrap</span>();
 
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>v0</span> <span class='op'>==</span> <span class='ident'>v1</span>);
     }

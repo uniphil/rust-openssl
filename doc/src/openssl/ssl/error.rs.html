@@ -313,9 +313,9 @@
 
     <span class='kw'>let</span> <span class='ident'>UnknownError</span> { <span class='kw-2'>ref</span> <span class='ident'>library</span>, <span class='kw-2'>ref</span> <span class='ident'>function</span>, <span class='kw-2'>ref</span> <span class='ident'>reason</span> } <span class='op'>=</span> <span class='ident'>errs</span>[<span class='number'>0</span>];
 
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>library</span>.<span class='ident'>as_slice</span>(), <span class='string'>&quot;SSL routines&quot;</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>function</span>.<span class='ident'>as_slice</span>(), <span class='string'>&quot;SSL23_GET_SERVER_HELLO&quot;</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>reason</span>.<span class='ident'>as_slice</span>(), <span class='string'>&quot;sslv3 alert handshake failure&quot;</span>);
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>library</span>[..], <span class='string'>&quot;SSL routines&quot;</span>);
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>function</span>[..], <span class='string'>&quot;SSL23_GET_SERVER_HELLO&quot;</span>);
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>reason</span>[..], <span class='string'>&quot;sslv3 alert handshake failure&quot;</span>);
 }
 </pre>
 </section>
