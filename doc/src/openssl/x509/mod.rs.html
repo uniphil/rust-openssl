@@ -574,16 +574,14 @@
 <span id="532">532</span>
 <span id="533">533</span>
 <span id="534">534</span>
-<span id="535">535</span>
 </pre><pre class='rust '>
-<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_char</span>, <span class='ident'>c_int</span>, <span class='ident'>c_long</span>, <span class='ident'>c_uint</span>};
+<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_char</span>, <span class='ident'>c_int</span>, <span class='ident'>c_long</span>, <span class='ident'>c_ulong</span>, <span class='ident'>c_uint</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cmp</span>::<span class='ident'>Ordering</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>CString</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>iter</span>::<span class='ident'>repeat</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>num</span>::<span class='ident'>SignedInt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ptr</span>;
 
 <span class='kw'>use</span> <span class='ident'>asn1</span>::{<span class='ident'>Asn1Time</span>};
@@ -865,8 +863,8 @@
 
         <span class='comment'>// While OpenSSL is actually OK to have negative serials</span>
         <span class='comment'>// other libraries (for example, Go crypto) can drop</span>
-        <span class='comment'>// such certificates as invalid</span>
-        <span class='ident'>res</span>.<span class='ident'>abs</span>()
+        <span class='comment'>// such certificates as invalid, so we clear the high bit</span>
+        ((<span class='ident'>res</span> <span class='kw'>as</span> <span class='ident'>c_ulong</span>) <span class='op'>&gt;&gt;</span> <span class='number'>1</span>) <span class='kw'>as</span> <span class='ident'>c_long</span>
     }
 
     <span class='doccomment'>/// Generates a private key and a signed certificate and returns them</span>
