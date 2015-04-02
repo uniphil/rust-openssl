@@ -43,7 +43,7 @@
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>openssl</a>::<wbr><a href='../index.html'>crypto</a>::<wbr><a href='index.html'>hmac</a>::<wbr><a class='struct' href=''>HMAC</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-5003' href='../../../src/openssl/crypto/hmac.rs.html#65-69'>[src]</a></span></h1>
+        </span><a id='src-4899' href='../../../src/openssl/crypto/hmac.rs.html#65-69'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct HMAC {
     // some fields omitted
 }</pre><div class='docblock'><p>Provides HMAC computation.</p>
@@ -58,7 +58,7 @@
 <span class='kw'>let</span> <span class='ident'>data</span> <span class='op'>=</span> <span class='string'>b&quot;what do ya want for nothing?&quot;</span>;
 <span class='kw'>let</span> <span class='ident'>spec</span> <span class='op'>=</span> <span class='string'>b&quot;\x75\x0c\x78\x3e\x6a\xb0\xb5\x03\xea\xa8\x6e\x31\x0a\x5d\xb7\x38&quot;</span>;
 <span class='kw'>let</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='ident'>hmac</span>(<span class='ident'>Type</span>::<span class='ident'>MD5</span>, <span class='ident'>key</span>, <span class='ident'>data</span>);
-<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>spec</span>, <span class='ident'>res</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>res</span>, <span class='ident'>spec</span>);
 </pre>
 
 <p>Use the <code>Write</code> trait to supply the input in chunks.</p>
@@ -73,7 +73,7 @@
 <span class='ident'>h</span>.<span class='ident'>write_all</span>(<span class='ident'>data</span>[<span class='number'>0</span>]);
 <span class='ident'>h</span>.<span class='ident'>write_all</span>(<span class='ident'>data</span>[<span class='number'>1</span>]);
 <span class='kw'>let</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='ident'>h</span>.<span class='ident'>finish</span>();
-<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>spec</span>, <span class='ident'>res</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>res</span>, <span class='ident'>spec</span>);
 </pre>
 </div><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Unmarked' title='No stability level'></a><code>impl <a class='struct' href='../../../openssl/crypto/hmac/struct.HMAC.html' title='openssl::crypto::hmac::HMAC'>HMAC</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.new' class='fnname'>new</a>(ty: <a class='enum' href='../../../openssl/crypto/hash/enum.Type.html' title='openssl::crypto::hash::Type'>Type</a>, key: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../../../openssl/crypto/hmac/struct.HMAC.html' title='openssl::crypto::hmac::HMAC'>HMAC</a></code></h4>
 <div class='docblock'><p>Creates a new <code>HMAC</code> with the specified hash type using the <code>key</code>.</p>

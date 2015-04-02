@@ -1740,7 +1740,7 @@
             <span class='prelude-val'>Err</span>(<span class='ident'>SslSessionClosed</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='number'>0</span>),
             <span class='prelude-val'>Err</span>(<span class='ident'>StreamError</span>(<span class='ident'>e</span>)) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>),
             <span class='prelude-val'>Err</span>(<span class='ident'>e</span> <span class='kw-2'>@</span> <span class='ident'>OpenSslErrors</span>(_)) <span class='op'>=&gt;</span> {
-                <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>, <span class='string'>&quot;OpenSSL error&quot;</span>, <span class='prelude-val'>Some</span>(<span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>e</span>))))
+                <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>, <span class='ident'>e</span>))
             }
         }
     }
@@ -1753,7 +1753,7 @@
             <span class='prelude-val'>Err</span>(<span class='ident'>SslSessionClosed</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='number'>0</span>),
             <span class='prelude-val'>Err</span>(<span class='ident'>StreamError</span>(<span class='ident'>e</span>)) <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>),
             <span class='prelude-val'>Err</span>(<span class='ident'>e</span> <span class='kw-2'>@</span> <span class='ident'>OpenSslErrors</span>(_)) <span class='op'>=&gt;</span> {
-                <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>, <span class='string'>&quot;OpenSSL error&quot;</span>, <span class='prelude-val'>Some</span>(<span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>e</span>))))
+                <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>, <span class='ident'>e</span>))
             }
         }
     }
