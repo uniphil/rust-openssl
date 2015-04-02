@@ -928,7 +928,6 @@
 <span id="886">886</span>
 <span id="887">887</span>
 <span id="888">888</span>
-<span id="889">889</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_void</span>, <span class='ident'>c_long</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>any</span>::<span class='ident'>TypeId</span>;
@@ -937,7 +936,6 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>AsOsStr</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>Path</span>;
@@ -945,7 +943,7 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::{<span class='ident'>Once</span>, <span class='ident'>ONCE_INIT</span>, <span class='ident'>Arc</span>, <span class='ident'>Mutex</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::{<span class='ident'>Deref</span>, <span class='ident'>DerefMut</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cmp</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>marker</span>::<span class='ident'>Reflect</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>any</span>::<span class='ident'>Any</span>;
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;npn&quot;</span>)]</span>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_uchar</span>, <span class='ident'>c_uint</span>};
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;npn&quot;</span>)]</span>
@@ -1064,7 +1062,7 @@
 <span class='comment'>// Creates a static index for user data of type T</span>
 <span class='comment'>// Registers a destructor for the data which will be called</span>
 <span class='comment'>// when context is freed</span>
-<span class='kw'>fn</span> <span class='ident'>get_verify_data_idx</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Reflect</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;</span>() <span class='op'>-&gt;</span> <span class='ident'>c_int</span> {
+<span class='kw'>fn</span> <span class='ident'>get_verify_data_idx</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Any</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;</span>() <span class='op'>-&gt;</span> <span class='ident'>c_int</span> {
     <span class='kw'>extern</span> <span class='kw'>fn</span> <span class='ident'>free_data_box</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>_parent</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>,
                                <span class='ident'>_ad</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>CRYPTO_EX_DATA</span>, <span class='ident'>_idx</span>: <span class='ident'>c_int</span>,
                                <span class='ident'>_argl</span>: <span class='ident'>c_long</span>, <span class='ident'>_argp</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>) {
@@ -1131,7 +1129,7 @@
 
 <span class='kw'>extern</span> <span class='kw'>fn</span> <span class='ident'>raw_verify_with_data</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>preverify_ok</span>: <span class='ident'>c_int</span>,
                                   <span class='ident'>x509_ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>X509_STORE_CTX</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>
-                                  <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>Reflect</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
+                                  <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>Any</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
     <span class='kw'>unsafe</span> {
         <span class='kw'>let</span> <span class='ident'>idx</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>SSL_get_ex_data_X509_STORE_CTX_idx</span>();
         <span class='kw'>let</span> <span class='ident'>ssl</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>X509_STORE_CTX_get_ex_data</span>(<span class='ident'>x509_ctx</span>, <span class='ident'>idx</span>);
@@ -1288,7 +1286,7 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_verify_with_data</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>SslVerifyMode</span>,
                                    <span class='ident'>verify</span>: <span class='ident'>VerifyCallbackData</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>,
                                    <span class='ident'>data</span>: <span class='ident'>T</span>)
-                                   <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>Reflect</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
+                                   <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>Any</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
         <span class='kw'>let</span> <span class='ident'>data</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>data</span>);
         <span class='kw'>unsafe</span> {
             <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>VERIFY_IDX</span>,

@@ -43,7 +43,7 @@
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ssl</a>::<wbr><a class='struct' href=''>SslContext</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-10540' href='../../src/openssl/ssl/mod.rs.html#309-311'>[src]</a></span></h1>
+        </span><a id='src-10539' href='../../src/openssl/ssl/mod.rs.html#308-310'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct SslContext {
     // some fields omitted
 }</pre><div class='docblock'><p>An SSL context object</p>
@@ -51,7 +51,7 @@
 <div class='docblock'><p>Creates a new SSL context.</p>
 </div><h4 id='method.set_verify' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_verify' class='fnname'>set_verify</a>(&amp;mut self, mode: <a class='enum' href='../../openssl/ssl/enum.SslVerifyMode.html' title='openssl::ssl::SslVerifyMode'>SslVerifyMode</a>, verify: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../openssl/ssl/type.VerifyCallback.html' title='openssl::ssl::VerifyCallback'>VerifyCallback</a>&gt;)</code></h4>
 <div class='docblock'><p>Configures the certificate verification method for new connections.</p>
-</div><h4 id='method.set_verify_with_data' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_verify_with_data' class='fnname'>set_verify_with_data</a>&lt;T&gt;(&amp;mut self, mode: <a class='enum' href='../../openssl/ssl/enum.SslVerifyMode.html' title='openssl::ssl::SslVerifyMode'>SslVerifyMode</a>, verify: <a class='type' href='../../openssl/ssl/type.VerifyCallbackData.html' title='openssl::ssl::VerifyCallbackData'>VerifyCallbackData</a>&lt;T&gt;, data: T) <span class='where'>where T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Reflect.html' title='core::marker::Reflect'>Reflect</a> + 'static</span></code></h4>
+</div><h4 id='method.set_verify_with_data' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_verify_with_data' class='fnname'>set_verify_with_data</a>&lt;T&gt;(&amp;mut self, mode: <a class='enum' href='../../openssl/ssl/enum.SslVerifyMode.html' title='openssl::ssl::SslVerifyMode'>SslVerifyMode</a>, verify: <a class='type' href='../../openssl/ssl/type.VerifyCallbackData.html' title='openssl::ssl::VerifyCallbackData'>VerifyCallbackData</a>&lt;T&gt;, data: T) <span class='where'>where T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/any/trait.Any.html' title='core::any::Any'>Any</a> + 'static</span></code></h4>
 <div class='docblock'><p>Configures the certificate verification method for new connections also
 carrying supplied data.</p>
 </div><h4 id='method.set_verify_depth' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_verify_depth' class='fnname'>set_verify_depth</a>(&amp;mut self, depth: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></h4>
