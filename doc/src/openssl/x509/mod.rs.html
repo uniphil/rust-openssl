@@ -597,7 +597,7 @@
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>tests</span>;
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>)]</span>
 <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>i32</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>X509FileType</span> {
     <span class='ident'>PEM</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>X509_FILETYPE_PEM</span>,
@@ -1026,7 +1026,7 @@
 
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>make_validation_error</span>(
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ok_val</span>:<span class='ident'>ident</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>val</span>:<span class='ident'>ident</span>,)<span class='op'>+</span>) <span class='op'>=&gt;</span> (
-        <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>)]</span>
+        <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>)]</span>
         <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>X509ValidationError</span> {
             $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>,)<span class='op'>+</span>
             <span class='ident'>X509UnknownError</span>(<span class='ident'>c_int</span>)
