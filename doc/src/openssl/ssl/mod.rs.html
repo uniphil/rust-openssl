@@ -928,6 +928,11 @@
 <span id="886">886</span>
 <span id="887">887</span>
 <span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_void</span>, <span class='ident'>c_long</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>any</span>::<span class='ident'>TypeId</span>;
@@ -1237,8 +1242,11 @@
 
 <span class='doccomment'>/// An SSL context object</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>SslContext</span> {
-    <span class='ident'>ctx</span>: <span class='ident'>ptr</span>::<span class='ident'>Unique</span><span class='op'>&lt;</span><span class='ident'>ffi</span>::<span class='ident'>SSL_CTX</span><span class='op'>&gt;</span>
+    <span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX</span>
 }
+
+<span class='kw'>unsafe</span> <span class='kw'>impl</span> <span class='ident'>Send</span> <span class='kw'>for</span> <span class='ident'>SslContext</span> {}
+<span class='kw'>unsafe</span> <span class='kw'>impl</span> <span class='ident'>Sync</span> <span class='kw'>for</span> <span class='ident'>SslContext</span> {}
 
 <span class='comment'>// TODO: add useful info here</span>
 <span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>SslContext</span> {
@@ -1249,7 +1257,7 @@
 
 <span class='kw'>impl</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>SslContext</span> {
     <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_free</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>) }
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_free</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>) }
     }
 }
 
@@ -1263,19 +1271,18 @@
             <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>SslError</span>::<span class='ident'>get</span>());
         }
 
-        <span class='kw'>let</span> <span class='ident'>ctx</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>SslContext</span> { <span class='ident'>ctx</span>: <span class='ident'>ptr</span>::<span class='ident'>Unique</span>::<span class='ident'>new</span>(<span class='ident'>ctx</span>) } };
-        <span class='prelude-val'>Ok</span>(<span class='ident'>ctx</span>)
+        <span class='prelude-val'>Ok</span>(<span class='ident'>SslContext</span> { <span class='ident'>ctx</span>: <span class='ident'>ctx</span> })
     }
 
     <span class='doccomment'>/// Configures the certificate verification method for new connections.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_verify</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>SslVerifyMode</span>,
                       <span class='ident'>verify</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>VerifyCallback</span><span class='op'>&gt;</span>) {
         <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>VERIFY_IDX</span>,
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>VERIFY_IDX</span>,
                                      <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>verify</span>));
             <span class='kw'>let</span> <span class='ident'>f</span>: <span class='kw'>extern</span> <span class='kw'>fn</span>(<span class='ident'>c_int</span>, <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>X509_STORE_CTX</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> <span class='op'>=</span>
                                 <span class='ident'>raw_verify</span>;
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span> <span class='kw'>as</span> <span class='ident'>c_int</span>, <span class='prelude-val'>Some</span>(<span class='ident'>f</span>));
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span> <span class='kw'>as</span> <span class='ident'>c_int</span>, <span class='prelude-val'>Some</span>(<span class='ident'>f</span>));
         }
     }
 
@@ -1289,20 +1296,20 @@
                                    <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>Any</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
         <span class='kw'>let</span> <span class='ident'>data</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>data</span>);
         <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>VERIFY_IDX</span>,
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>VERIFY_IDX</span>,
                                      <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='prelude-val'>Some</span>(<span class='ident'>verify</span>)));
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>get_verify_data_idx</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(),
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>get_verify_data_idx</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(),
                                      <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>data</span>));
             <span class='kw'>let</span> <span class='ident'>f</span>: <span class='kw'>extern</span> <span class='kw'>fn</span>(<span class='ident'>c_int</span>, <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>X509_STORE_CTX</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> <span class='op'>=</span>
                                 <span class='ident'>raw_verify_with_data</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>;
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span> <span class='kw'>as</span> <span class='ident'>c_int</span>, <span class='prelude-val'>Some</span>(<span class='ident'>f</span>));
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span> <span class='kw'>as</span> <span class='ident'>c_int</span>, <span class='prelude-val'>Some</span>(<span class='ident'>f</span>));
         }
     }
 
     <span class='doccomment'>/// Sets verification depth</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_verify_depth</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>depth</span>: <span class='ident'>u32</span>) {
         <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify_depth</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>depth</span> <span class='kw'>as</span> <span class='ident'>c_int</span>);
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify_depth</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>depth</span> <span class='kw'>as</span> <span class='ident'>c_int</span>);
         }
     }
 
@@ -1312,7 +1319,7 @@
         <span class='kw'>let</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='ident'>CString</span>::<span class='ident'>new</span>(<span class='ident'>file</span>.<span class='ident'>as_os_str</span>().<span class='ident'>to_str</span>().<span class='ident'>expect</span>(<span class='string'>&quot;invalid utf8&quot;</span>)).<span class='ident'>unwrap</span>();
         <span class='ident'>wrap_ssl_result</span>(
             <span class='kw'>unsafe</span> {
-                <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_load_verify_locations</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>file</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>ptr</span>::<span class='ident'>null</span>())
+                <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_load_verify_locations</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>file</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>ptr</span>::<span class='ident'>null</span>())
             })
     }
 
@@ -1322,7 +1329,7 @@
         <span class='kw'>let</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='ident'>CString</span>::<span class='ident'>new</span>(<span class='ident'>file</span>.<span class='ident'>as_os_str</span>().<span class='ident'>to_str</span>().<span class='ident'>expect</span>(<span class='string'>&quot;invalid utf8&quot;</span>)).<span class='ident'>unwrap</span>();
         <span class='ident'>wrap_ssl_result</span>(
             <span class='kw'>unsafe</span> {
-                <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_use_certificate_file</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>file</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>file_type</span> <span class='kw'>as</span> <span class='ident'>c_int</span>)
+                <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_use_certificate_file</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>file</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>file_type</span> <span class='kw'>as</span> <span class='ident'>c_int</span>)
             })
     }
 
@@ -1332,7 +1339,7 @@
         <span class='kw'>let</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='ident'>CString</span>::<span class='ident'>new</span>(<span class='ident'>file</span>.<span class='ident'>as_os_str</span>().<span class='ident'>to_str</span>().<span class='ident'>expect</span>(<span class='string'>&quot;invalid utf8&quot;</span>)).<span class='ident'>unwrap</span>();
         <span class='ident'>wrap_ssl_result</span>(
             <span class='kw'>unsafe</span> {
-                <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_use_PrivateKey_file</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>file</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>file_type</span> <span class='kw'>as</span> <span class='ident'>c_int</span>)
+                <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_use_PrivateKey_file</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>file</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>file_type</span> <span class='kw'>as</span> <span class='ident'>c_int</span>)
             })
     }
 
@@ -1340,21 +1347,21 @@
         <span class='ident'>wrap_ssl_result</span>(
             <span class='kw'>unsafe</span> {
                 <span class='kw'>let</span> <span class='ident'>cipher_list</span> <span class='op'>=</span> <span class='ident'>CString</span>::<span class='ident'>new</span>(<span class='ident'>cipher_list</span>.<span class='ident'>as_bytes</span>()).<span class='ident'>unwrap</span>();
-                <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_cipher_list</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>cipher_list</span>.<span class='ident'>as_ptr</span>())
+                <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_cipher_list</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>cipher_list</span>.<span class='ident'>as_ptr</span>())
             })
     }
 
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_options</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>option</span>: <span class='ident'>SslContextOptions</span>) <span class='op'>-&gt;</span> <span class='ident'>SslContextOptions</span> {
         <span class='kw'>let</span> <span class='ident'>raw_bits</span> <span class='op'>=</span> <span class='ident'>option</span>.<span class='ident'>bits</span>();
         <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_options</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>raw_bits</span>)
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_options</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>raw_bits</span>)
         };
         <span class='ident'>SslContextOptions</span>::<span class='ident'>from_bits</span>(<span class='ident'>ret</span>).<span class='ident'>unwrap</span>()
     }
 
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_options</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>SslContextOptions</span> {
         <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_get_options</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>)
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_get_options</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>)
         };
         <span class='ident'>SslContextOptions</span>::<span class='ident'>from_bits</span>(<span class='ident'>ret</span>).<span class='ident'>unwrap</span>()
     }
@@ -1362,7 +1369,7 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>clear_options</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>option</span>: <span class='ident'>SslContextOptions</span>) <span class='op'>-&gt;</span> <span class='ident'>SslContextOptions</span> {
         <span class='kw'>let</span> <span class='ident'>raw_bits</span> <span class='op'>=</span> <span class='ident'>option</span>.<span class='ident'>bits</span>();
         <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_clear_options</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>raw_bits</span>)
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_clear_options</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>raw_bits</span>)
         };
         <span class='ident'>SslContextOptions</span>::<span class='ident'>from_bits</span>(<span class='ident'>ret</span>).<span class='ident'>unwrap</span>()
     }
@@ -1387,15 +1394,15 @@
         <span class='kw'>unsafe</span> {
             <span class='comment'>// Attach the protocol list to the OpenSSL context structure,</span>
             <span class='comment'>// so that we can refer to it within the callback.</span>
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>get_npn_protos_idx</span>(),
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_ex_data</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>get_npn_protos_idx</span>(),
                                      <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>protocols</span>));
             <span class='comment'>// Now register the callback that performs the default protocol</span>
             <span class='comment'>// matching based on the client-supported list of protocols that</span>
             <span class='comment'>// has been saved.</span>
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_next_proto_select_cb</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>raw_next_proto_select_cb</span>, <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>());
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_next_proto_select_cb</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>raw_next_proto_select_cb</span>, <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>());
             <span class='comment'>// Also register the callback to advertise these protocols, if a server socket is</span>
             <span class='comment'>// created with the context.</span>
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_next_protos_advertised_cb</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>raw_next_protos_advertise_cb</span>, <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>());
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_next_protos_advertised_cb</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>raw_next_protos_advertise_cb</span>, <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>());
         }
     }
 }
@@ -1421,8 +1428,11 @@
 }
 
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Ssl</span> {
-    <span class='ident'>ssl</span>: <span class='ident'>ptr</span>::<span class='ident'>Unique</span><span class='op'>&lt;</span><span class='ident'>ffi</span>::<span class='ident'>SSL</span><span class='op'>&gt;</span>
+    <span class='ident'>ssl</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>SSL</span>
 }
+
+<span class='kw'>unsafe</span> <span class='kw'>impl</span> <span class='ident'>Send</span> <span class='kw'>for</span> <span class='ident'>Ssl</span> {}
+<span class='kw'>unsafe</span> <span class='kw'>impl</span> <span class='ident'>Sync</span> <span class='kw'>for</span> <span class='ident'>Ssl</span> {}
 
 <span class='comment'>// TODO: put useful information here</span>
 <span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>Ssl</span> {
@@ -1433,31 +1443,31 @@
 
 <span class='kw'>impl</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>Ssl</span> {
     <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_free</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>) }
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_free</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>) }
     }
 }
 
 <span class='kw'>impl</span> <span class='ident'>Ssl</span> {
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>ctx</span>: <span class='kw-2'>&amp;</span><span class='ident'>SslContext</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Ssl</span>, <span class='ident'>SslError</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>ssl</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_new</span>(<span class='op'>*</span><span class='ident'>ctx</span>.<span class='ident'>ctx</span>) };
+        <span class='kw'>let</span> <span class='ident'>ssl</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_new</span>(<span class='ident'>ctx</span>.<span class='ident'>ctx</span>) };
         <span class='kw'>if</span> <span class='ident'>ssl</span> <span class='op'>==</span> <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>() {
             <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>SslError</span>::<span class='ident'>get</span>());
         }
-        <span class='kw'>let</span> <span class='ident'>ssl</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>Ssl</span> { <span class='ident'>ssl</span>: <span class='ident'>ptr</span>::<span class='ident'>Unique</span>::<span class='ident'>new</span>(<span class='ident'>ssl</span>) } };
+        <span class='kw'>let</span> <span class='ident'>ssl</span> <span class='op'>=</span> <span class='ident'>Ssl</span> { <span class='ident'>ssl</span>: <span class='ident'>ssl</span> };
 
         <span class='kw'>let</span> <span class='ident'>rbio</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>MemBio</span>::<span class='ident'>new</span>());
         <span class='kw'>let</span> <span class='ident'>wbio</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>MemBio</span>::<span class='ident'>new</span>());
 
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_set_bio</span>(<span class='op'>*</span><span class='ident'>ssl</span>.<span class='ident'>ssl</span>, <span class='ident'>rbio</span>.<span class='ident'>unwrap</span>(), <span class='ident'>wbio</span>.<span class='ident'>unwrap</span>()) }
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_set_bio</span>(<span class='ident'>ssl</span>.<span class='ident'>ssl</span>, <span class='ident'>rbio</span>.<span class='ident'>unwrap</span>(), <span class='ident'>wbio</span>.<span class='ident'>unwrap</span>()) }
         <span class='prelude-val'>Ok</span>(<span class='ident'>ssl</span>)
     }
 
     <span class='kw'>fn</span> <span class='ident'>get_rbio</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>MemBioRef</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> { <span class='self'>self</span>.<span class='ident'>wrap_bio</span>(<span class='ident'>ffi</span>::<span class='ident'>SSL_get_rbio</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>)) }
+        <span class='kw'>unsafe</span> { <span class='self'>self</span>.<span class='ident'>wrap_bio</span>(<span class='ident'>ffi</span>::<span class='ident'>SSL_get_rbio</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>)) }
     }
 
     <span class='kw'>fn</span> <span class='ident'>get_wbio</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>MemBioRef</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> { <span class='self'>self</span>.<span class='ident'>wrap_bio</span>(<span class='ident'>ffi</span>::<span class='ident'>SSL_get_wbio</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>)) }
+        <span class='kw'>unsafe</span> { <span class='self'>self</span>.<span class='ident'>wrap_bio</span>(<span class='ident'>ffi</span>::<span class='ident'>SSL_get_wbio</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>)) }
     }
 
     <span class='kw'>fn</span> <span class='ident'>wrap_bio</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='self'>self</span>, <span class='ident'>bio</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>BIO</span>) <span class='op'>-&gt;</span> <span class='ident'>MemBioRef</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
@@ -1469,25 +1479,25 @@
     }
 
     <span class='kw'>fn</span> <span class='ident'>connect</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> {
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_connect</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>) }
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_connect</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>) }
     }
 
     <span class='kw'>fn</span> <span class='ident'>accept</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> {
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_accept</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>) }
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_accept</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>) }
     }
 
     <span class='kw'>fn</span> <span class='ident'>read</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>buf</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> [<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> {
         <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>cmp</span>::<span class='ident'>min</span>(<span class='ident'>c_int</span>::<span class='ident'>max_value</span>() <span class='kw'>as</span> <span class='ident'>usize</span>, <span class='ident'>buf</span>.<span class='ident'>len</span>()) <span class='kw'>as</span> <span class='ident'>c_int</span>;
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_read</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='ident'>buf</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>len</span>) }
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_read</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='ident'>buf</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>len</span>) }
     }
 
     <span class='kw'>fn</span> <span class='ident'>write</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>buf</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> {
         <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>cmp</span>::<span class='ident'>min</span>(<span class='ident'>c_int</span>::<span class='ident'>max_value</span>() <span class='kw'>as</span> <span class='ident'>usize</span>, <span class='ident'>buf</span>.<span class='ident'>len</span>()) <span class='kw'>as</span> <span class='ident'>c_int</span>;
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_write</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='ident'>buf</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>, <span class='ident'>len</span>) }
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_write</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='ident'>buf</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>, <span class='ident'>len</span>) }
     }
 
     <span class='kw'>fn</span> <span class='ident'>get_error</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>ret</span>: <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='ident'>LibSslError</span> {
-        <span class='kw'>let</span> <span class='ident'>err</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_get_error</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='ident'>ret</span>) };
+        <span class='kw'>let</span> <span class='ident'>err</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_get_error</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='ident'>ret</span>) };
         <span class='kw'>match</span> <span class='ident'>LibSslError</span>::<span class='ident'>from_i32</span>(<span class='ident'>err</span> <span class='kw'>as</span> <span class='ident'>i32</span>) {
             <span class='prelude-val'>Some</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='ident'>err</span>,
             <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='macro'>unreachable</span><span class='macro'>!</span>()
@@ -1502,7 +1512,7 @@
                 <span class='comment'>//          SSL_ctrl(s,SSL_CTRL_SET_TLSEXT_HOSTNAME,TLSEXT_NAMETYPE_host_name,(char *)name)</span>
 
                 <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='ident'>CString</span>::<span class='ident'>new</span>(<span class='ident'>hostname</span>.<span class='ident'>as_bytes</span>()).<span class='ident'>unwrap</span>();
-                <span class='ident'>ffi</span>::<span class='ident'>SSL_ctrl</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='ident'>ffi</span>::<span class='ident'>SSL_CTRL_SET_TLSEXT_HOSTNAME</span>,
+                <span class='ident'>ffi</span>::<span class='ident'>SSL_ctrl</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='ident'>ffi</span>::<span class='ident'>SSL_CTRL_SET_TLSEXT_HOSTNAME</span>,
                               <span class='ident'>ffi</span>::<span class='ident'>TLSEXT_NAMETYPE_host_name</span>,
                               <span class='ident'>hostname</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>)
         };
@@ -1517,7 +1527,7 @@
 
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_peer_certificate</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>X509</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>SSL_get_peer_certificate</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>);
+            <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>SSL_get_peer_certificate</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>);
             <span class='kw'>if</span> <span class='ident'>ptr</span>.<span class='ident'>is_null</span>() {
                 <span class='prelude-val'>None</span>
             } <span class='kw'>else</span> {
@@ -1539,7 +1549,7 @@
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>len</span>: <span class='ident'>c_uint</span> <span class='op'>=</span> <span class='number'>0</span>;
             <span class='comment'>// Get the negotiated protocol from the SSL instance.</span>
             <span class='comment'>// `data` will point at a `c_uchar` array; `len` will contain the length of this array.</span>
-            <span class='ident'>ffi</span>::<span class='ident'>SSL_get0_next_proto_negotiated</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>data</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>len</span>);
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_get0_next_proto_negotiated</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>data</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>len</span>);
 
             <span class='kw'>if</span> <span class='ident'>data</span>.<span class='ident'>is_null</span>() {
                 <span class='prelude-val'>None</span>
@@ -1675,7 +1685,7 @@
     <span class='kw'>fn</span> <span class='ident'>in_retry_wrapper</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='kw-2'>mut</span> <span class='ident'>blk</span>: <span class='ident'>F</span>)
             <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>c_int</span>, <span class='ident'>SslError</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnMut</span>(<span class='kw-2'>&amp;</span><span class='ident'>Ssl</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> {
         <span class='kw'>loop</span> {
-            <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='ident'>blk</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>);
+            <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='ident'>blk</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>ssl</span>);
             <span class='kw'>if</span> <span class='ident'>ret</span> <span class='op'>&gt;</span> <span class='number'>0</span> {
                 <span class='kw'>return</span> <span class='prelude-val'>Ok</span>(<span class='ident'>ret</span>);
             }
@@ -1706,7 +1716,7 @@
     <span class='doccomment'>/// either None, indicating no compression is in use, or a string</span>
     <span class='doccomment'>/// with the compression name.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_compression</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_get_current_compression</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ssl</span>.<span class='ident'>ssl</span>) };
+        <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>SSL_get_current_compression</span>(<span class='self'>self</span>.<span class='ident'>ssl</span>.<span class='ident'>ssl</span>) };
         <span class='kw'>if</span> <span class='ident'>ptr</span> <span class='op'>==</span> <span class='ident'>ptr</span>::<span class='ident'>null</span>() {
             <span class='kw'>return</span> <span class='prelude-val'>None</span>;
         }
