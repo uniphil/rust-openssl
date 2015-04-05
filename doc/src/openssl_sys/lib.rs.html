@@ -616,6 +616,21 @@
 <span id="574">574</span>
 <span id="575">575</span>
 <span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>non_camel_case_types</span>, <span class='ident'>non_upper_case_globals</span>, <span class='ident'>non_snake_case</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
@@ -751,6 +766,8 @@
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_CTRL_CLEAR_OPTIONS</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>77</span>;
 
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_CTRL_SET_TLSEXT_HOSTNAME</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>55</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_CTRL_EXTRA_CHAIN_CERT</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>14</span>;
+
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_ERROR_NONE</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>0</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_ERROR_SSL</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>1</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_ERROR_SYSCALL</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>5</span>;
@@ -762,6 +779,7 @@
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_ERROR_ZERO_RETURN</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>6</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_VERIFY_NONE</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>0</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_VERIFY_PEER</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>1</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_VERIFY_FAIL_IF_NO_PEER_CERT</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>2</span>;
 
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>TLSEXT_NAMETYPE_host_name</span>: <span class='ident'>c_long</span> <span class='op'>=</span> <span class='number'>0</span>;
 
@@ -893,6 +911,11 @@
 <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_clear_options</span>(<span class='ident'>ssl</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>op</span>: <span class='ident'>c_long</span>) <span class='op'>-&gt;</span> <span class='ident'>c_long</span> {
     <span class='ident'>SSL_CTX_ctrl</span>(<span class='ident'>ssl</span>, <span class='ident'>SSL_CTRL_CLEAR_OPTIONS</span>, (<span class='ident'>op</span>), <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>())
 }
+
+<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_add_extra_chain_cert</span>(<span class='ident'>ssl</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>cert</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>X509</span>) <span class='op'>-&gt;</span> <span class='ident'>c_long</span> {
+    <span class='ident'>SSL_CTX_ctrl</span>(<span class='ident'>ssl</span>, <span class='ident'>SSL_CTRL_EXTRA_CHAIN_CERT</span>, <span class='number'>0</span>, <span class='ident'>cert</span>)
+}
+
 
 <span class='comment'>// True functions</span>
 <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> {
@@ -1053,6 +1076,9 @@
 
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>PEM_read_bio_X509</span>(<span class='ident'>bio</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>BIO</span>, <span class='ident'>out</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>X509</span>, <span class='ident'>callback</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PasswordCallback</span><span class='op'>&gt;</span>,
                              <span class='ident'>user_data</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>X509</span>;
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>PEM_read_bio_PrivateKey</span>(<span class='ident'>bio</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>BIO</span>, <span class='ident'>out</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>EVP_PKEY</span>, <span class='ident'>callback</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PasswordCallback</span><span class='op'>&gt;</span>,
+                             <span class='ident'>user_data</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>X509</span>;
+
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>PEM_write_bio_PrivateKey</span>(<span class='ident'>bio</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>BIO</span>, <span class='ident'>pkey</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>EVP_PKEY</span>, <span class='ident'>cipher</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>EVP_CIPHER</span>,
                                     <span class='ident'>kstr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>, <span class='ident'>klen</span>: <span class='ident'>c_int</span>,
                                     <span class='ident'>callback</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PasswordCallback</span><span class='op'>&gt;</span>,
@@ -1128,7 +1154,11 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_get_ex_data</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>idx</span>: <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>;
 
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_use_certificate_file</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>cert_file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>file_type</span>: <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_use_certificate</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>cert</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>X509</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_use_PrivateKey_file</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>key_file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>file_type</span>: <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_use_PrivateKey</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>key</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>EVP_PKEY</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_check_private_key</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_set_cipher_list</span>(<span class='ident'>ssl</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>s</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 

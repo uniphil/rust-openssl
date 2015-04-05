@@ -43,7 +43,7 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>openssl</a>::<wbr><a class='mod' href=''>ssl</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-8001' href='../../src/openssl/ssl/mod.rs.html#1-893'>[src]</a></span></h1>
+        </span><a id='src-8093' href='../../src/openssl/ssl/mod.rs.html#1-930'>[src]</a></span></h1>
 <h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr>
@@ -78,6 +78,12 @@
                         <td class='docblock short'><p>A stream wrapper which handles SSL encryption for an underlying stream.</p>
 </td>
                     </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.SslVerifyMode.html'
+                               title='openssl::ssl::SslVerifyMode'>SslVerifyMode</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
                 </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
                     <tr>
@@ -91,13 +97,6 @@
                         <td><a class='stability Unmarked' title='No stability level'></a><a class='enum' href='enum.SslMethod.html'
                                title='openssl::ssl::SslMethod'>SslMethod</a></td>
                         <td class='docblock short'><p>Determines the SSL method supported</p>
-</td>
-                    </tr>
-                
-                    <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='enum' href='enum.SslVerifyMode.html'
-                               title='openssl::ssl::SslVerifyMode'>SslVerifyMode</a></td>
-                        <td class='docblock short'><p>Determines the type of certificate verification used</p>
 </td>
                     </tr>
                 </table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
@@ -268,6 +267,28 @@
                         <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_OP_TLS_ROLLBACK_BUG.html'
                                title='openssl::ssl::SSL_OP_TLS_ROLLBACK_BUG'>SSL_OP_TLS_ROLLBACK_BUG</a></td>
                         <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_VERIFY_FAIL_IF_NO_PEER_CERT.html'
+                               title='openssl::ssl::SSL_VERIFY_FAIL_IF_NO_PEER_CERT'>SSL_VERIFY_FAIL_IF_NO_PEER_CERT</a></td>
+                        <td class='docblock short'><p>/// Terminate handshake if client did not return a certificate.
+/// Use together with SSL_VERIFY_PEER.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_VERIFY_NONE.html'
+                               title='openssl::ssl::SSL_VERIFY_NONE'>SSL_VERIFY_NONE</a></td>
+                        <td class='docblock short'><p>/// Do not verify the server&#39;s certificate</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SSL_VERIFY_PEER.html'
+                               title='openssl::ssl::SSL_VERIFY_PEER'>SSL_VERIFY_PEER</a></td>
+                        <td class='docblock short'><p>/// Verify that the server&#39;s certificate is trusted</p>
+</td>
                     </tr>
                 </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
 <table>
