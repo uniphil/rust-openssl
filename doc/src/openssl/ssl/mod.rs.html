@@ -970,6 +970,54 @@
 <span id="928">928</span>
 <span id="929">929</span>
 <span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_void</span>, <span class='ident'>c_long</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>any</span>::<span class='ident'>TypeId</span>;
@@ -1070,6 +1118,12 @@
     <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;tlsv1_2&quot;</span>)]</span>
     <span class='doccomment'>/// Support TLSv1.2 protocol, requires the `tlsv1_2` feature.</span>
     <span class='ident'>Tlsv1_2</span>,
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1&quot;</span>)]</span>
+    <span class='doccomment'>/// Support DTLSv1 protocol, requires the `dtlsv1` feature.</span>
+    <span class='ident'>Dtlsv1</span>,
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1_2&quot;</span>)]</span>
+    <span class='doccomment'>/// Support DTLSv1.2 protocol, requires the `dtlsv1_2` feature.</span>
+    <span class='ident'>Dtlsv1_2</span>,
 }
 
 <span class='kw'>impl</span> <span class='ident'>SslMethod</span> {
@@ -1083,8 +1137,36 @@
             <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;tlsv1_1&quot;</span>)]</span>
             <span class='ident'>SslMethod</span>::<span class='ident'>Tlsv1_1</span> <span class='op'>=&gt;</span> <span class='ident'>ffi</span>::<span class='ident'>TLSv1_1_method</span>(),
             <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;tlsv1_2&quot;</span>)]</span>
-            <span class='ident'>SslMethod</span>::<span class='ident'>Tlsv1_2</span> <span class='op'>=&gt;</span> <span class='ident'>ffi</span>::<span class='ident'>TLSv1_2_method</span>()
+            <span class='ident'>SslMethod</span>::<span class='ident'>Tlsv1_2</span> <span class='op'>=&gt;</span> <span class='ident'>ffi</span>::<span class='ident'>TLSv1_2_method</span>(),
+            <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1&quot;</span>)]</span>
+            <span class='ident'>SslMethod</span>::<span class='ident'>Dtlsv1</span> <span class='op'>=&gt;</span> <span class='ident'>ffi</span>::<span class='ident'>DTLSv1_method</span>(),
+            <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1_2&quot;</span>)]</span>
+            <span class='ident'>SslMethod</span>::<span class='ident'>Dtlsv1_2</span> <span class='op'>=&gt;</span> <span class='ident'>ffi</span>::<span class='ident'>DTLSv1_2_method</span>(),
         }
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1&quot;</span>)]</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_dtlsv1</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='op'>*</span><span class='self'>self</span> <span class='op'>==</span> <span class='ident'>SslMethod</span>::<span class='ident'>Dtlsv1</span>
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1_2&quot;</span>)]</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_dtlsv1_2</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='op'>*</span><span class='self'>self</span> <span class='op'>==</span> <span class='ident'>SslMethod</span>::<span class='ident'>Dtlsv1_2</span>
+    }
+
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_dtls</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='self'>self</span>.<span class='ident'>is_dtlsv1</span>() <span class='op'>||</span> <span class='self'>self</span>.<span class='ident'>is_dtlsv1_2</span>()
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1&quot;</span>))]</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_dtlsv1</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='boolval'>false</span>
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1_2&quot;</span>))]</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_dtlsv1_2</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='boolval'>false</span>
     }
 }
 
@@ -1312,7 +1394,13 @@
             <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>SslError</span>::<span class='ident'>get</span>());
         }
 
-        <span class='prelude-val'>Ok</span>(<span class='ident'>SslContext</span> { <span class='ident'>ctx</span>: <span class='ident'>ctx</span> })
+        <span class='kw'>let</span> <span class='ident'>ctx</span> <span class='op'>=</span> <span class='ident'>SslContext</span> { <span class='ident'>ctx</span>: <span class='ident'>ctx</span> };
+
+        <span class='kw'>if</span> <span class='ident'>method</span>.<span class='ident'>is_dtls</span>() {
+            <span class='ident'>ctx</span>.<span class='ident'>set_read_ahead</span>(<span class='number'>1</span>);
+        }
+
+        <span class='prelude-val'>Ok</span>(<span class='ident'>ctx</span>)
     }
 
     <span class='doccomment'>/// Configures the certificate verification method for new connections.</span>
@@ -1323,6 +1411,7 @@
                                      <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>verify</span>));
             <span class='kw'>let</span> <span class='ident'>f</span>: <span class='kw'>extern</span> <span class='kw'>fn</span>(<span class='ident'>c_int</span>, <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>X509_STORE_CTX</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> <span class='op'>=</span>
                                 <span class='ident'>raw_verify</span>;
+
             <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span>.<span class='ident'>bits</span> <span class='kw'>as</span> <span class='ident'>c_int</span>, <span class='prelude-val'>Some</span>(<span class='ident'>f</span>));
         }
     }
@@ -1343,6 +1432,7 @@
                                      <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>data</span>));
             <span class='kw'>let</span> <span class='ident'>f</span>: <span class='kw'>extern</span> <span class='kw'>fn</span>(<span class='ident'>c_int</span>, <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>X509_STORE_CTX</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span> <span class='op'>=</span>
                                 <span class='ident'>raw_verify_with_data</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>;
+
             <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span>.<span class='ident'>bits</span> <span class='kw'>as</span> <span class='ident'>c_int</span>, <span class='prelude-val'>Some</span>(<span class='ident'>f</span>));
         }
     }
@@ -1351,6 +1441,12 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_verify_depth</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>depth</span>: <span class='ident'>u32</span>) {
         <span class='kw'>unsafe</span> {
             <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_verify_depth</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>depth</span> <span class='kw'>as</span> <span class='ident'>c_int</span>);
+        }
+    }
+
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_read_ahead</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>m</span>: <span class='ident'>u32</span>) {
+        <span class='kw'>unsafe</span> {
+            <span class='ident'>ffi</span>::<span class='ident'>SSL_CTX_set_read_ahead</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>m</span> <span class='kw'>as</span> <span class='ident'>c_long</span>);
         }
     }
 

@@ -631,6 +631,14 @@
 <span id="589">589</span>
 <span id="590">590</span>
 <span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>non_camel_case_types</span>, <span class='ident'>non_upper_case_globals</span>, <span class='ident'>non_snake_case</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
@@ -768,6 +776,7 @@
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_CTRL_SET_TLSEXT_HOSTNAME</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>55</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_CTRL_EXTRA_CHAIN_CERT</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>14</span>;
 
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_CTRL_SET_READ_AHEAD</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>41</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_ERROR_NONE</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>0</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_ERROR_SSL</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>1</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>SSL_ERROR_SYSCALL</span>: <span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>5</span>;
@@ -916,6 +925,9 @@
     <span class='ident'>SSL_CTX_ctrl</span>(<span class='ident'>ssl</span>, <span class='ident'>SSL_CTRL_EXTRA_CHAIN_CERT</span>, <span class='number'>0</span>, <span class='ident'>cert</span>)
 }
 
+<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>SSL_CTX_set_read_ahead</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>, <span class='ident'>m</span>: <span class='ident'>c_long</span>) <span class='op'>-&gt;</span> <span class='ident'>c_long</span> {
+    <span class='ident'>SSL_CTX_ctrl</span>(<span class='ident'>ctx</span>, <span class='ident'>SSL_CTRL_SET_READ_AHEAD</span>, <span class='ident'>m</span>, <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>())
+}
 
 <span class='comment'>// True functions</span>
 <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> {
@@ -1116,6 +1128,10 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>TLSv1_1_method</span>() <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>SSL_METHOD</span>;
     <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;tlsv1_2&quot;</span>)]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>TLSv1_2_method</span>() <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>SSL_METHOD</span>;
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1&quot;</span>)]</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>DTLSv1_method</span>() <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>SSL_METHOD</span>;
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;dtlsv1_2&quot;</span>)]</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>DTLSv1_2_method</span>() <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>SSL_METHOD</span>;
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSLv23_method</span>() <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>SSL_METHOD</span>;
 
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SSL_new</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL_CTX</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>SSL</span>;

@@ -43,7 +43,7 @@
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ssl</a>::<wbr><a class='struct' href=''>SslContext</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-11554' href='../../src/openssl/ssl/mod.rs.html#312-314'>[src]</a></span></h1>
+        </span><a id='src-11636' href='../../src/openssl/ssl/mod.rs.html#346-348'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct SslContext {
     // some fields omitted
 }</pre><div class='docblock'><p>An SSL context object</p>
@@ -56,7 +56,8 @@
 carrying supplied data.</p>
 </div><h4 id='method.set_verify_depth' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_verify_depth' class='fnname'>set_verify_depth</a>(&amp;mut self, depth: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></h4>
 <div class='docblock'><p>Sets verification depth</p>
-</div><h4 id='method.set_CA_file' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_CA_file' class='fnname'>set_CA_file</a>(&amp;mut self, file: &amp;<a class='struct' href='http://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../../openssl/ssl/error/enum.SslError.html' title='openssl::ssl::error::SslError'>SslError</a>&gt;</code></h4>
+</div><h4 id='method.set_read_ahead' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_read_ahead' class='fnname'>set_read_ahead</a>(&amp;self, m: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></h4>
+<h4 id='method.set_CA_file' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_CA_file' class='fnname'>set_CA_file</a>(&amp;mut self, file: &amp;<a class='struct' href='http://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../../openssl/ssl/error/enum.SslError.html' title='openssl::ssl::error::SslError'>SslError</a>&gt;</code></h4>
 <div class='docblock'><p>Specifies the file that contains trusted CA certificates.</p>
 </div><h4 id='method.set_certificate_file' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_certificate_file' class='fnname'>set_certificate_file</a>(&amp;mut self, file: &amp;<a class='struct' href='http://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a>, file_type: <a class='enum' href='../../openssl/x509/enum.X509FileType.html' title='openssl::x509::X509FileType'>X509FileType</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../../openssl/ssl/error/enum.SslError.html' title='openssl::ssl::error::SslError'>SslError</a>&gt;</code></h4>
 <div class='docblock'><p>Specifies the file that contains certificate</p>
