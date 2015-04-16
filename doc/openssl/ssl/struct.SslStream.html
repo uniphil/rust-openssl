@@ -43,7 +43,7 @@
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ssl</a>::<wbr><a class='struct' href=''>SslStream</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-12976' href='../../src/openssl/ssl/mod.rs.html#745-749'>[src]</a></span></h1>
+        </span><a id='src-13019' href='../../src/openssl/ssl/mod.rs.html#745-749'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct SslStream&lt;S&gt; {
     // some fields omitted
 }</pre><div class='docblock'><p>A stream wrapper which handles SSL encryption for an underlying stream.</p>
@@ -56,13 +56,6 @@
 <div class='docblock'><p>Creates a new SSL stream</p>
 </div><h4 id='method.new_server' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.new_server' class='fnname'>new_server</a>(ctx: &amp;<a class='struct' href='../../openssl/ssl/struct.SslContext.html' title='openssl::ssl::SslContext'>SslContext</a>, stream: S) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../openssl/ssl/struct.SslStream.html' title='openssl::ssl::SslStream'>SslStream</a>&lt;S&gt;, <a class='enum' href='../../openssl/ssl/error/enum.SslError.html' title='openssl::ssl::error::SslError'>SslError</a>&gt;</code></h4>
 <div class='docblock'><p>Creates a new SSL server stream</p>
-</div><h4 id='method.get_inner' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.get_inner' class='fnname'>get_inner</a>(&amp;mut self) -&gt; &amp;mut S</code></h4>
-<div class='docblock'><p>Returns a mutable reference to the underlying stream.</p>
-
-<h2 id="warning" class='section-header'><a
-                           href="#warning">Warning</a></h2>
-<p><code>read</code>ing or <code>write</code>ing directly to the underlying stream will most
-likely desynchronize the SSL session.</p>
 </div><h4 id='method.get_ref' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.get_ref' class='fnname'>get_ref</a>(&amp;self) -&gt; &amp;S</code></h4>
 <div class='docblock'><p>Returns a reference to the underlying stream.</p>
 </div><h4 id='method.get_mut' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.get_mut' class='fnname'>get_mut</a>(&amp;mut self) -&gt; &amp;mut S</code></h4>

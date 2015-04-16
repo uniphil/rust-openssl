@@ -494,6 +494,16 @@
 <span id="452">452</span>
 <span id="453">453</span>
 <span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_uint</span>, <span class='ident'>c_ulong</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
@@ -508,7 +518,7 @@
 <span class='kw'>use</span> <span class='ident'>ssl</span>::<span class='ident'>error</span>::{<span class='ident'>SslError</span>, <span class='ident'>StreamError</span>};
 
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>)]</span>
-<span class='kw'>enum</span> <span class='ident'>Parts</span> {
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Parts</span> {
     <span class='ident'>Neither</span>,
     <span class='ident'>Public</span>,
     <span class='ident'>Both</span>
@@ -564,6 +574,16 @@
                 <span class='ident'>evp</span>: <span class='ident'>ffi</span>::<span class='ident'>EVP_PKEY_new</span>(),
                 <span class='ident'>parts</span>: <span class='ident'>Parts</span>::<span class='ident'>Neither</span>,
             }
+        }
+    }
+
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>from_handle</span>(<span class='ident'>handle</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>EVP_PKEY</span>, <span class='ident'>parts</span>: <span class='ident'>Parts</span>) <span class='op'>-&gt;</span> <span class='ident'>PKey</span> {
+        <span class='ident'>ffi</span>::<span class='ident'>init</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>handle</span>.<span class='ident'>is_null</span>());
+
+        <span class='ident'>PKey</span> {
+            <span class='ident'>evp</span>: <span class='ident'>handle</span>,
+            <span class='ident'>parts</span>: <span class='ident'>parts</span>,
         }
     }
 
