@@ -640,6 +640,9 @@
 <span id="598">598</span>
 <span id="599">599</span>
 <span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>non_camel_case_types</span>, <span class='ident'>non_upper_case_globals</span>, <span class='ident'>non_snake_case</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
@@ -1082,8 +1085,11 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>HMAC_CTX_copy</span>(<span class='ident'>dst</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>HMAC_CTX</span>, <span class='ident'>src</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>HMAC_CTX</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
     <span class='comment'>// Pre-1.0 versions of these didn&#39;t return anything, so the shims bridge that gap</span>
+    <span class='attribute'>#[<span class='ident'>cfg_attr</span>(<span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;nacl&quot;</span>, <span class='ident'>link_name</span> <span class='op'>=</span> <span class='string'>&quot;HMAC_Init_ex&quot;</span>)]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>HMAC_Init_ex_shim</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>HMAC_CTX</span>, <span class='ident'>key</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>u8</span>, <span class='ident'>keylen</span>: <span class='ident'>c_int</span>, <span class='ident'>md</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>EVP_MD</span>, <span class='ident'>imple</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>ENGINE</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+    <span class='attribute'>#[<span class='ident'>cfg_attr</span>(<span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;nacl&quot;</span>, <span class='ident'>link_name</span> <span class='op'>=</span> <span class='string'>&quot;HMAC_Final&quot;</span>)]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>HMAC_Final_shim</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>HMAC_CTX</span>, <span class='ident'>output</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>u8</span>, <span class='ident'>len</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_uint</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+    <span class='attribute'>#[<span class='ident'>cfg_attr</span>(<span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;nacl&quot;</span>, <span class='ident'>link_name</span> <span class='op'>=</span> <span class='string'>&quot;HMAC_Update&quot;</span>)]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>HMAC_Update_shim</span>(<span class='ident'>ctx</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>HMAC_CTX</span>, <span class='ident'>input</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>u8</span>, <span class='ident'>len</span>: <span class='ident'>c_uint</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
 
