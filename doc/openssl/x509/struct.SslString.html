@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-14160' class='srclink' href='../../src/openssl/x509/mod.rs.html#27-29' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-14167' class='srclink' href='../../src/openssl/x509/mod.rs.html#27-29' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct SslString {
     // some fields omitted
 }</pre><h2 id='deref-methods'>Methods from <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a>&lt;Target=<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</h2><div class='impl-items'><h4 id='method.escape_default' class='method'><code>fn <a href='#method.escape_default' class='fnname'>escape_default</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
@@ -551,9 +551,8 @@ to the <code>end</code>-th code point. This does not detect or handle edge cases
 such as leaving a combining character as the first code point of the
 string.</p>
 
-<p>Due to the design of UTF-8, this operation is <code>O(end)</code>. See <code>slice</code>,
-<code>slice_to</code> and <code>slice_from</code> for <code>O(1)</code> variants that use byte indices
-rather than code point indices.</p>
+<p>Due to the design of UTF-8, this operation is <code>O(end)</code>. Use slicing
+syntax if you want to use byte indices rather than codepoint indices.</p>
 
 <h1 id="panics" class='section-header'><a
                            href="#panics">Panics</a></h1>
@@ -1071,16 +1070,22 @@ locale is unknown.</p>
 <div class='stability'><em class='stab unstable'>Unstable</em></div><div class='docblock'><p>Returns the lowercase equivalent of this string.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1>
-<p>let s = &quot;HELLO&quot;;
-assert_eq!(s.to_lowercase(), &quot;hello&quot;);</p>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>collections</span>)]</span>
+
+<span class='kw'>let</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='string'>&quot;HELLO&quot;</span>;
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>to_lowercase</span>(), <span class='string'>&quot;hello&quot;</span>);
+</pre>
 </div><h4 id='method.to_uppercase' class='method'><code>fn <a href='#method.to_uppercase' class='fnname'>to_uppercase</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
 <div class='stability'><em class='stab unstable'>Unstable</em></div><div class='docblock'><p>Returns the uppercase equivalent of this string.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1>
-<p>let s = &quot;hello&quot;;
-assert_eq!(s.to_uppercase(), &quot;HELLO&quot;);</p>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>collections</span>)]</span>
+
+<span class='kw'>let</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='string'>&quot;hello&quot;</span>;
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>to_uppercase</span>(), <span class='string'>&quot;HELLO&quot;</span>);
+</pre>
 </div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'s&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../../openssl/x509/struct.SslString.html' title='openssl::x509::SslString'>SslString</a></code></h3><div class='impl-items'><h4 id='method.drop' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
 </div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a> for <a class='struct' href='../../openssl/x509/struct.SslString.html' title='openssl::x509::SslString'>SslString</a></code></h3><div class='impl-items'><h4 id='assoc_type.Target' class='type'><code>type Target = <a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
 <h4 id='method.deref' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#method.deref' class='fnname'>deref</a>(&amp;self) -&gt; &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
