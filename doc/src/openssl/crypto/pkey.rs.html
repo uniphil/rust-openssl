@@ -534,6 +534,15 @@
 <span id="492">492</span>
 <span id="493">493</span>
 <span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_uint</span>, <span class='ident'>c_ulong</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
@@ -832,17 +841,26 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>decrypt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>s</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> { <span class='self'>self</span>.<span class='ident'>decrypt_with_padding</span>(<span class='ident'>s</span>, <span class='ident'>EncryptionPadding</span>::<span class='ident'>OAEP</span>) }
 
     <span class='doccomment'>/**
-     * Signs data, using OpenSSL&#39;s default scheme and sha256. Unlike encrypt(),
-     * can process an arbitrary amount of data; returns the signature.
+     * Signs data, using OpenSSL&#39;s default scheme and adding sha256 ASN.1 information to the
+     * signature.
+     * The bytes to sign must be the result of a sha256 hashing;
+     * returns the signature.
      */</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>sign</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>s</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> { <span class='self'>self</span>.<span class='ident'>sign_with_hash</span>(<span class='ident'>s</span>, <span class='ident'>HashType</span>::<span class='ident'>SHA256</span>) }
 
     <span class='doccomment'>/**
-     * Verifies a signature s (using OpenSSL&#39;s default scheme and sha256) on a
-     * message m. Returns true if the signature is valid, and false otherwise.
+     * Verifies a signature s (using OpenSSL&#39;s default scheme and sha256) on the SHA256 hash of a
+     * message.
+     * Returns true if the signature is valid, and false otherwise.
      */</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>verify</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>m</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>s</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>bool</span> { <span class='self'>self</span>.<span class='ident'>verify_with_hash</span>(<span class='ident'>m</span>, <span class='ident'>s</span>, <span class='ident'>HashType</span>::<span class='ident'>SHA256</span>) }
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>verify</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>h</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>s</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>bool</span> { <span class='self'>self</span>.<span class='ident'>verify_with_hash</span>(<span class='ident'>h</span>, <span class='ident'>s</span>, <span class='ident'>HashType</span>::<span class='ident'>SHA256</span>) }
 
+    <span class='doccomment'>/**
+     * Signs data, using OpenSSL&#39;s default scheme and add ASN.1 information for the given hash type to the
+     * signature.
+     * The bytes to sign must be the result of this type of hashing;
+     * returns the signature.
+     */</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>sign_with_hash</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>s</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>hash</span>: <span class='ident'>hash</span>::<span class='ident'>Type</span>) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='kw'>let</span> <span class='ident'>rsa</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>EVP_PKEY_get1_RSA</span>(<span class='self'>self</span>.<span class='ident'>evp</span>);
@@ -867,14 +885,14 @@
         }
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>verify_with_hash</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>m</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>s</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>hash</span>: <span class='ident'>hash</span>::<span class='ident'>Type</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>verify_with_hash</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>h</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>s</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>hash</span>: <span class='ident'>hash</span>::<span class='ident'>Type</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
         <span class='kw'>unsafe</span> {
             <span class='kw'>let</span> <span class='ident'>rsa</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>EVP_PKEY_get1_RSA</span>(<span class='self'>self</span>.<span class='ident'>evp</span>);
 
             <span class='kw'>let</span> <span class='ident'>rv</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>RSA_verify</span>(
                 <span class='ident'>openssl_hash_nid</span>(<span class='ident'>hash</span>),
-                <span class='ident'>m</span>.<span class='ident'>as_ptr</span>(),
-                <span class='ident'>m</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>c_uint</span>,
+                <span class='ident'>h</span>.<span class='ident'>as_ptr</span>(),
+                <span class='ident'>h</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>c_uint</span>,
                 <span class='ident'>s</span>.<span class='ident'>as_ptr</span>(),
                 <span class='ident'>s</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>c_uint</span>,
                 <span class='ident'>rsa</span>
